@@ -1,6 +1,6 @@
 import React from 'react';
-import { Upload, FileSpreadsheet, CheckCircle, ShieldCheck } from 'lucide-react';
-import { parseExcelFile } from '../utils/excel';
+import { Upload, FileSpreadsheet, FileJson, CheckCircle, ShieldCheck } from 'lucide-react';
+import { parseExcelFile, parseJsonFile } from '../utils/excel';
 import { Lead } from '../types';
 
 interface FileUploadProps {
@@ -13,11 +13,19 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
     if (!file) return;
 
     try {
-      const leads = await parseExcelFile(file);
+      let leads: Lead[] = [];
+      const fileName = file.name.toLowerCase();
+
+      if (fileName.endsWith('.json')) {
+         leads = await parseJsonFile(file);
+      } else {
+         leads = await parseExcelFile(file);
+      }
+      
       onDataLoaded(leads, file.name);
     } catch (error) {
       console.error("Erro ao ler arquivo", error);
-      alert("Erro ao ler o arquivo Excel. Certifique-se de que é um formato válido.");
+      alert("Erro ao ler o arquivo. Certifique-se de que é um formato válido (.xlsx, .csv ou .json).");
     }
   };
 
@@ -40,7 +48,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
           Importar Base de Leads
         </h3>
         <p className="text-zinc-400 text-center max-w-md mb-8 leading-relaxed text-sm">
-          Arraste sua planilha do Excel ou CSV aqui.<br/>
+          Arraste sua planilha ou arquivo JSON aqui.<br/>
           O sistema detecta automaticamente Telefones e Usuários.
         </p>
         
@@ -58,12 +66,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
         <div className="flex items-center gap-2 text-xs text-zinc-500 bg-black/40 px-4 py-2 rounded-lg border border-white/5 font-mono">
            <FileSpreadsheet className="w-3 h-3" />
-           <span>Suporta .xlsx, .xls, .csv</span>
+           <span>.xlsx .csv</span>
+           <span className="text-zinc-700">|</span>
+           <FileJson className="w-3 h-3" />
+           <span>.json</span>
         </div>
 
         <input 
           type="file" 
-          accept=".xlsx, .xls, .csv" 
+          accept=".xlsx, .xls, .csv, .json" 
           className="hidden" 
           onChange={handleFileChange} 
         />
