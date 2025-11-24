@@ -38,10 +38,15 @@ export const generateWhatsAppLink = (phone: string, template: string, leadName: 
 export const generateInstagramLink = (username: string): string => {
   if (!username) return '';
 
-  // Handle cases where the input might be a full URL already or contain @
   let cleanUser = String(username).trim();
+
+  // Se já for um link completo (comum em JSON Scrapers), retorna direto
+  if (cleanUser.startsWith('http')) {
+      return cleanUser;
+  }
   
-  // Remove protocol and domain if user pasted a full link
+  // Lógica legada para Excel ou inputs manuais (usuário digita @nome ou nome)
+  // Remove protocol and domain just in case
   cleanUser = cleanUser.replace(/^(https?:\/\/)?(www\.)?instagram\.com\//i, '');
   
   // Remove query params
