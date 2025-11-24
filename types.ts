@@ -5,7 +5,7 @@ export interface Lead {
   phone: string | null;
   originalPhone: string;
   notes?: string;
-  status: 'pending' | 'contacted' | 'skipped';
+  status: 'pending' | 'contacted' | 'skipped' | 'prospect';
 }
 
 export interface ImportStats {

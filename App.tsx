@@ -3,7 +3,7 @@ import { FileUpload } from './components/FileUpload';
 import { LeadTable } from './components/LeadTable';
 import { TemplateEditor } from './components/TemplateEditor';
 import { Lead } from './types';
-import { LayoutDashboard, Users, Smartphone, RefreshCw, X } from 'lucide-react';
+import { LayoutDashboard, Users, Smartphone, RefreshCw, X, Star } from 'lucide-react';
 
 // Default template
 const DEFAULT_TEMPLATE = "Olá {nome}, tudo bem? Vi seu perfil no Instagram e achei seu trabalho incrível! Gostaria de conversar sobre uma oportunidade.";
@@ -33,7 +33,8 @@ function App() {
   const stats = {
     total: leads.length,
     validPhones: leads.filter(l => l.phone).length,
-    contacted: leads.filter(l => l.status === 'contacted').length
+    contacted: leads.filter(l => l.status === 'contacted').length,
+    prospects: leads.filter(l => l.status === 'prospect').length
   };
 
   if (leads.length === 0) {
@@ -103,6 +104,13 @@ function App() {
                         <Smartphone className="w-3 h-3" /> {stats.validPhones}
                     </span>
                 </div>
+                 <div className="h-8 w-px bg-slate-200"></div>
+                 <div className="flex flex-col items-end">
+                     <span className="text-slate-400 text-xs uppercase font-semibold tracking-wider">Prospects</span>
+                     <span className="font-bold text-amber-500 flex items-center gap-1">
+                         <Star className="w-3 h-3" /> {stats.prospects}
+                     </span>
+                 </div>
                  <div className="h-8 w-px bg-slate-200"></div>
                  <div className="flex flex-col items-end">
                      <span className="text-slate-400 text-xs uppercase font-semibold tracking-wider">Contactados</span>
